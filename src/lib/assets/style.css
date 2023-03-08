@@ -1,0 +1,146 @@
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+*:focus {
+	outline: none;
+}
+*::-webkit-scrollbar {
+	display: none !important;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: 'Inter', system-ui, -apple-system, sans-serif;
+	color: black;
+	user-select: none;
+
+	transition: all 0.3s linear;
+	transition: all 0.15s ease, top, left;
+	scroll-behavior: smooth;
+	scrollbar-color: transparent transparent;
+	-webkit-tap-highlight-color: transparent;
+
+	text-rendering: optimizeLegibility;
+	font-smooth: antialiased;
+	-moz-osx-font-smoothing: antialiased;
+	-webkit-font-smoothing: antialiased;
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+	text-decoration: inherit;
+	text-decoration-skip-ink: all;
+	text-decoration-color: inherit;
+	color: inherit;
+}
+
+ul,
+li {
+	list-style: none;
+}
+
+.h-fit-content {
+	height: fit-content;
+}
+.w-fit-content {
+	width: fit-content;
+}
+
+.scaffold {
+	height: 100vh;
+	width: 100vw;
+	min-width: 1000px;
+}
+.s-uQk77vb8087t.s-uQk77vb8087t {
+	overflow: scroll;
+}
+.container {
+	width: 100%;
+	height: 100%;
+	align-items: center;
+}
+.justify-between {
+	justify-content: space-between !important;
+}
+.justify-center {
+	justify-content: center !important;
+}
+.justify-start {
+	justify-content: flex-start !important;
+}
+.justify-end {
+	justify-content: end !important;
+}
+.align-start {
+	align-items: flex-start !important;
+}
+.align-center {
+	align-items: center !important;
+}
+.align-end {
+	align-items: end !important;
+}
+.fluid-column {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+
+	justify-content: space-between;
+	align-items: center;
+	/* overflow: scroll; */
+}
+.column {
+	display: flex;
+	flex-direction: column;
+
+	justify-content: space-between;
+	align-items: center;
+}
+.fluid-row {
+	display: flex;
+	width: 100%;
+	height: 100%;
+
+	justify-content: space-between;
+	align-items: center;
+	/* overflow: scroll; */
+}
+.row {
+	display: flex;
+
+	justify-content: space-between;
+	align-items: center;
+}
+.stack {
+	display: grid;
+	grid-template-columns: 1;
+	grid-template-rows: 1;
+}
+.stack-item {
+	grid-row: 1;
+	grid-column: 1;
+}
+.unit-padding {
+	padding: 1rem;
+}
+.unit-margin {
+	margin: 1rem;
+}
+.unit-gap {
+	gap: 1rem;
+}
+
+.divider {
+	width: 100%;
+	height: 2px;
+	border-radius: 4px;
+	background-color: #f3f3f4;
+}
