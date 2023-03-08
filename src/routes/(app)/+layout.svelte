@@ -138,7 +138,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="main-container fluid-column">
+				<div class="main-container fluid-column" style:overflow="hidden">
 					<div class="sub-nav fluid-row">
 						<div class="greeting row" style:gap={'1.8rem'}>
 							<div class="icons-row row" style:gap={'2rem'}>
