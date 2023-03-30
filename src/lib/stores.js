@@ -20,7 +20,8 @@ export const contextStore = writable({
 	showMenu: false,
 	pos: { x: 0, y: 0 },
 	type: null,
-	elementOptions: {}
+	elementOptions: [],
+	eventDetails: {}
 });
 
 export const refStore = writable({ userRef: {} });

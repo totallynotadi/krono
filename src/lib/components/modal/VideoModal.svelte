@@ -14,7 +14,7 @@
 	/**
 	 * @type {any}
 	 */
-	export let imageThumbnailURL;
+	export let blobURL;
 	/**
 	 * @type {any}
 	 */
@@ -29,14 +29,15 @@
 		transition:blur={{ duration: 400 }}
 	>
 		<!-- <div>lmao</div> -->
-		<img src={imageThumbnailURL} alt="" />
+		<!-- svelte-ignore a11y-media-has-caption -->
+		<video src={blobURL} autoplay="true" />
 		<!-- <button class="filled-button" on:click={closeModal}>CLOSE</button> -->
 		<div class="title">{fileName}</div>
 	</div>
 {/if}
 
 <style>
-	img {
+	video {
 		width: 100%;
 		/* height: 100%; */
 		max-width: min-content;

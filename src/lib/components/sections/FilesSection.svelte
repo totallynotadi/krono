@@ -5,22 +5,23 @@
 	 * @type {any[]}
 	 */
 	export let userFiles = [];
+	export let sectionTitle = 'Files';
 </script>
 
-<section class="fluid-column align-start justify-start">
-	<div class="title">Files</div>
+<section class="fluid-column align-start justify-start" style:height="fit-content">
+	<div class="title">{sectionTitle}</div>
 	<div class="content-grid">
 		{#each userFiles as file}
-			<FileCard title={'untitled-01.jpg'} imageURL={file} />
+			<FileCard title={file.filename} imageURL={file.blobURL} fileType={file.fileType} />
 		{/each}
 		<FileCard title={'untitled-01.jpg'} />
 		<FileCard title={'untitled-01.jpg'} />
 		<FileCard title={'untitled-01.jpg'} />
+		<!-- <FileCard title={'untitled-01.jpg'} />
 		<FileCard title={'untitled-01.jpg'} />
 		<FileCard title={'untitled-01.jpg'} />
 		<FileCard title={'untitled-01.jpg'} />
-		<FileCard title={'untitled-01.jpg'} />
-		<FileCard title={'untitled-01.jpg'} />
+		<FileCard title={'untitled-01.jpg'} /> -->
 	</div>
 </section>
 

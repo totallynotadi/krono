@@ -19,6 +19,8 @@
 		</div>
 		<FileCard />
 		<FileCard />
+		<FileCard />
+		<FileCard />
 		<div class="folder-container fluid-column justify-start">
 			<FolderCard />
 			<FolderCard />
@@ -27,10 +29,10 @@
 		<FileCard />
 		<FileCard />
 		<FileCard />
+		<!-- <FileCard />
 		<FileCard />
 		<FileCard />
-		<FileCard />
-		<FileCard />
+		<FileCard /> -->
 	</div>
 </section>
 

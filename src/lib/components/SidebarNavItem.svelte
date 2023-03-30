@@ -11,7 +11,7 @@
 	export let icon = GoogleDrive;
 	export let dropdown = false;
 
-	$: active = $page.url.pathname === linkTo;
+	$: active = $page.url.pathname.split('/')[1] === linkTo.split('/')[1];
 	$: color = active ? '#4486f4' : '#5F6368';
 	$: props = {
 		size: 22,
@@ -19,7 +19,7 @@
 	};
 </script>
 
-<div class="button fluid-row justify-start" class:active={$page.url.pathname === linkTo}>
+<div class="button fluid-row justify-start" class:active>
 	<a href={linkTo} class="fluid-row justify-start" style="gap:4px">
 		<div class="button-content" style:visibility={dropdown ? 'visible' : 'hidden'}>
 			<ChevronRight size={18} viewBox={'0 0 24 20'} {color} />

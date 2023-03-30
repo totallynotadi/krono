@@ -11,8 +11,8 @@
 		class="backdrop"
 		on:click={closeModal}
 		on:keypress={() => {}}
-		in:blur={{ duration: 150 }}
-		out:blur={{ duration: 150 }}
+		in:blur={{ duration: 400 }}
+		out:blur={{ duration: 400 }}
 	/>
 </Modals>
 
@@ -25,6 +25,10 @@
 		left: 0;
 		background-color: rgba(0, 0, 0, 0.4);
 		backdrop-filter: blur(8px);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
 		pointer-events: all;
 	}

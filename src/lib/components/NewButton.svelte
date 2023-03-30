@@ -3,15 +3,12 @@
 	import PlusDark from '../assets/PlusDark.svelte';
 	// import Plus from 'svelte-material-icons/Plus.svelte';
 
-	// import Modal from '$lib/components/modal/Modal.svelte';
-	// import { openModal } from 'svelte-modals';
 	import { showUploadContextMenu } from '$lib/contextMenuHelpers';
 </script>
 
 <div
 	class="button-container"
 	on:mousedown={(e) => {
-		// openModal(Modal, {});
 		console.log(e);
 		showUploadContextMenu(e);
 	}}

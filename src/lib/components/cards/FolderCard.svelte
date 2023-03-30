@@ -3,18 +3,28 @@
 
 	import Folder from 'svelte-material-icons/Folder.svelte';
 	import { onRightMouseDown } from '$lib/contextMenuHelpers';
+	import { goto } from '$app/navigation';
+
+	export let folderName = 'default';
 </script>
 
 <div
 	class="card row justify-start"
 	data-element-type="folder"
 	on:keypress={() => {}}
-	on:mousedown|stopPropagation={(e) => {
-		onRightMouseDown(e, 'folder');
+	on:contextmenu|stopPropagation|preventDefault={(e) => {
+		if (e.button == 2) {
+			onRightMouseDown(e, 'folder');
+		}
+	}}
+	on:dblclick={() => {
+		goto(`${window.location.pathname}/${folderName}`);
+		// window.location.href = `${window.location.pathname}/${folderName}`;
+		// window.location.reload(	);
 	}}
 >
 	<Folder size={22} color={'#5F6368'} />
-	<div class="title">Classroom</div>
+	<div class="title">{decodeURIComponent(folderName)}</div>
 </div>
 
 <style>

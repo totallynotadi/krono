@@ -45,6 +45,8 @@ export async function encrypt(file, passKey) {
 	// };
 	// reader.readAsText(file);
 	var plaintextbytes = await readfile(file);
+	console.error('original file', file, 'file');
+	let originalType = file.type;
 	// @ts-ignore
 	plaintextbytes = new Uint8Array(plaintextbytes);
 
@@ -107,7 +109,7 @@ export async function encrypt(file, passKey) {
 	// @ts-ignore
 	resultbytes.set(cipherbytes, 16);
 
-	var blob = new Blob([resultbytes], { type: 'image/jpeg' });
+	var blob = new Blob([resultbytes], { type: originalType });
 	// @ts-ignore
 	// @ts-ignore
 	var blobUrl = URL.createObjectURL(blob);
@@ -144,6 +146,7 @@ export async function decrypt(file, passKey) {
 	// reader.readAsText(file);
 
 	var cipherbytes = await readfile(file);
+	var originalType = file.type;
 
 	cipherbytes = new Uint8Array(cipherbytes);
 
@@ -195,7 +198,7 @@ export async function decrypt(file, passKey) {
 	// @ts-ignore
 	plaintextbytes = new Uint8Array(plaintextbytes);
 
-	var blob = new Blob([plaintextbytes], { type: 'image/jpeg' });
+	var blob = new Blob([plaintextbytes], { type: originalType });
 	var blobUrl = URL.createObjectURL(blob);
 	console.info('decrypted blob', blob, blobUrl);
 	return blob;

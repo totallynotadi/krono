@@ -1,6 +1,4 @@
 <script>
-	// @ts-nocheck
-
 	import '$lib/assets/style.css';
 
 	import BellOutline from 'svelte-material-icons/BellOutline.svelte';
@@ -16,6 +14,9 @@
 	import ArrowLeft from 'svelte-material-icons/ArrowLeft.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 	import InformationOutline from 'svelte-material-icons/InformationOutline.svelte';
+
+	import IconButton from '$lib/components/IconButton.svelte';
+
 	import ViewListOutline from '$lib/assets/ViewListOutline.svelte';
 
 	import SearchField from '$lib/components/SearchField.svelte';
@@ -28,8 +29,14 @@
 	import { authHandlers, authStore, contextStore } from '$lib/stores.js';
 
 	// import { globalHistory } from 'svelte-navigator/src/history';
-	import { blur } from 'svelte/transition';
+	import { blur, fade, slide } from 'svelte/transition';
 	import { onDestroy, onMount } from 'svelte';
+	import { Modals, closeModal } from 'svelte-modals';
+	import { auth, rootRef } from '$lib/firebase.client.js';
+	import { refStore } from '$lib/stores.js';
+	import { page } from '$app/stores';
+	import { get } from 'svelte/store';
+	import PageBreadCrumb from '$lib/components/PageBreadCrumb.svelte';
 
 	let dummyFieldWidth = 0;
 
@@ -37,6 +44,9 @@
 	contextStore.subscribe((newValue) => {
 		contextInfo = newValue;
 	});
+
+	// $: pageReactive = get(page).url.pathname;
+	$: pageBreadCrumbs = get(page).url.pathname.split('/').slice(1);
 
 	onMount(() => {
 		// unsub = globalHistory.listen(({ location, action }) => {
@@ -46,7 +56,9 @@
 		// 	});
 		// });
 		window.addEventListener('mousemove', (e) => {
+			// @ts-ignore
 			window.currentMouseX = e.x;
+			// @ts-ignore
 			window.currentMouseY = e.y;
 		});
 	});
@@ -55,19 +67,25 @@
 		// unsub();
 		if (browser) {
 			window.removeEventListener('mousemove', (e) => {
+				// @ts-ignore
 				window.currentMouseX = e.x;
+				// @ts-ignore
 				window.currentMouseY = e.y;
 			});
 		}
 	});
 
+	// @ts-ignore
 	function onPageClick(e) {
-		let mainContent = document.getElementById('main-content');
-		if (mainContent.contains(e.target)) {
-			console.log('page');
-			contextStore.update((oldValue) => {
-				return { ...oldValue, showMenu: false };
-			});
+		if (e.button == 0) {
+			let mainContent = document.getElementById('main-content');
+			// @ts-ignore
+			if (mainContent.contains(e.target)) {
+				console.log('page', get(contextStore));
+				contextStore.update((oldValue) => {
+					return { ...oldValue, showMenu: false, type: null };
+				});
+			}
 		}
 	}
 	// export let data;
@@ -96,9 +114,10 @@
 					<div class="dummy-field" bind:clientWidth={dummyFieldWidth} />
 					<div class="icons row">
 						<div class="icons-row row">
-							<BellOutline size={25} color={'#5F6368'} />
-							<HelpCircleOutline size={25} color={'#5F6368'} />
-							<CogOutline size={25} color={'#5F6368'} />
+							<!-- <BellOutline size={25} color={'#5F6368'} /> -->
+							<IconButton icon={BellOutline} />
+							<IconButton icon={HelpCircleOutline} />
+							<IconButton icon={CogOutline} />
 						</div>
 						<div
 							on:click={() => {
@@ -106,11 +125,10 @@
 								authStore.update(() => {
 									return { currentUser: 'undefined' };
 								});
-								document.cookies = '';
 							}}
 							on:keypress={() => {}}
 						>
-							<AccountCircle size={25} color={'#5F6368'} />
+							<IconButton icon={AccountCircle} />
 						</div>
 					</div>
 				</div>
@@ -139,31 +157,56 @@
 					</div>
 				</div>
 				<div class="main-container fluid-column" style:overflow="hidden">
-					<div class="sub-nav fluid-row">
-						<div class="greeting row" style:gap={'1.8rem'}>
-							<div class="icons-row row" style:gap={'2rem'}>
-								<ArrowLeft size={25} color={'#5F6368'} />
-								<ArrowRight size={25} color={'#5F6368'} />
+					<div class="sub-nav fluid-row" style:gap={'1.8rem'}>
+						<div class="row" style:gap={'1.8rem'}>
+							<div class="icons-row row" style:gap={'1rem'}>
+								<IconButton
+									icon={ArrowLeft}
+									callback={() => {
+										window.history.back();
+									}}
+								/>
+								<IconButton
+									icon={ArrowRight}
+									callback={() => {
+										window.history.forward();
+									}}
+								/>
 							</div>
-							{#if $authStore.currentUser?.displayName}
+							<!-- {console.log('lmao', $authStore.currentUser, 'auth', auth.currentUser)} -->
+							<!-- {#if $authStore.currentUser?.displayName} -->
+							<!-- {:else}
 								<div>
-									Good Morning, {$authStore.currentUser?.displayName?.split(' ')[0]}
+									Good Morning, {$authStore.currentUser?.user.displayName?.split(' ')[0]}
 								</div>
-							{:else}
-								<div>{window.location.pathname.split('/')[1]}</div>
-							{/if}
+								{/if} -->
+						</div>
+						<div class="greeting fluid-row justify-start">
+							<!-- Good Morning, {$authStore.currentUser?.displayName?.split(' ')[0]} -->
+							<!-- {#if !$page.url.pathname.includes('.')} -->
+							{#each $page.url.pathname.split('/').slice(1) as crumb, idx}
+								<PageBreadCrumb title={decodeURIComponent(crumb)} breadCrumbIndex={idx} />
+								<!-- <div>
+									{crumb}
+								</div> -->
+							{/each}
+							<!-- {/if} -->
 						</div>
 						<div class="icons-row row">
 							<!-- <ViewModuleOutline size={24} color={'#5F6368'} /> -->
-							<ViewListOutline />
-							<InformationOutline size={24} color={'#5F6368'} />
+							<IconButton icon={ViewListOutline} />
+							<IconButton icon={InformationOutline} />
+							<!-- <ViewListOutline /> -->
+							<!-- <InformationOutline size={24} color={'#5F6368'} /> -->
 						</div>
 					</div>
 					<div
 						id="main-content"
 						class="main-content fluid-column justify-start align-start"
-						on:mousedown={(e) => {
-							onRightMouseDown(e, 'default');
+						on:contextmenu|preventDefault={(e) => {
+							if (e.button == 2) {
+								onRightMouseDown(e, 'default');
+							}
 						}}
 					>
 						<slot />
@@ -172,6 +215,17 @@
 			</div>
 		</div>
 	</div>
+	<Modals>
+		<div
+			slot="backdrop"
+			class="backdrop"
+			on:click={closeModal}
+			on:keypress={() => {}}
+			in:blur={{ duration: 400 }}
+			out:blur={{ duration: 400 }}
+		/>
+	</Modals>
+
 	{#if $contextStore.showMenu}
 		<div
 			id="menu-element"
@@ -242,7 +296,7 @@
 		gap: 3rem;
 	}
 	.icons-row {
-		gap: 1.5rem;
+		gap: 0.7rem;
 	}
 	.sidebar-content {
 		padding: 0rem 1rem 1rem 0rem;
@@ -276,11 +330,27 @@
 		position: absolute;
 		height: fit-content;
 		width: 15.4rem;
-		background-color: rgba(244, 244, 244, 0.3);
-		backdrop-filter: blur(12px);
+		background-color: rgba(244, 244, 244, 0.8);
+		backdrop-filter: blur(10px);
 		border-radius: 1rem;
 		border: 1px solid rgb(234, 236, 238);
 		border: 1px solid lightgray;
 		padding: 0.4rem;
+	}
+
+	.backdrop {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		background-color: rgba(0, 0, 0, 0.4);
+		backdrop-filter: blur(8px);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		pointer-events: all;
 	}
 </style>

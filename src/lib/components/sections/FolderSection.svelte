@@ -1,20 +1,28 @@
 <script>
 	import FolderCard from '$lib/components/cards/FolderCard.svelte';
+
+	/**
+	 * @type {any[]}
+	 */
+	export let userFolders = [];
 </script>
 
-<section class="fluid-column align-start justify-start">
+<section class="fluid-column align-start justify-start" style:height="fit-content">
 	<div class="title">Folders</div>
 	<div class="content-grid">
+		{#each userFolders as folder}
+			<FolderCard folderName={folder} />
+		{/each}
+		<!-- <FolderCard />
 		<FolderCard />
 		<FolderCard />
-		<FolderCard />
-		<FolderCard />
-		<FolderCard />
-		<FolderCard />
-		<FolderCard />
-		<FolderCard />
-		<FolderCard />
-		<FolderCard />
+		<FolderCard /> -->
+		<!-- <FolderCard />
+			<FolderCard />
+			<FolderCard />
+			<FolderCard />
+			<FolderCard />
+			<FolderCard /> -->
 	</div>
 </section>
 

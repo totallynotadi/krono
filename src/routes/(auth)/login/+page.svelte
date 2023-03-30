@@ -13,7 +13,7 @@
 		let user = await signInWithPopup(auth, new GoogleAuthProvider());
 		// @ts-ignore
 		authStore.update(() => {
-			return { currentUser: user };
+			return { currentUser: auth.currentUser };
 		});
 	}
 
@@ -21,9 +21,9 @@
 		let user = await signInWithEmailAndPassword(auth, email, password);
 		// @ts-ignore
 		authStore.update(() => {
-			return { currentUser: user };
+			return { currentUser: auth.currentUser };
 		});
-		goto('/home');
+		// goto('/home');
 	}
 
 	let email;
@@ -85,7 +85,7 @@
 		flex-basis: 60rem;
 		flex-shrink: 1;
 		flex-grow: 1;
-		margin: 0 -2rem 0 6rem;
+		margin: 0 -2rem 0 10rem;
 	}
 	.input-field {
 		border: none;
@@ -136,22 +136,7 @@
 		letter-spacing: 0.25px;
 		font-weight: 600;
 	}
-	.filled-button {
-		all: unset;
-		background-color: #1187e0;
-		border-radius: 10px;
-		color: #fff;
-		padding: 0.8rem 5rem;
-		font-size: 14px;
-		font-weight: 500;
-		letter-spacing: 0.25px;
-	}
-	.filled-button:hover {
-		background-color: #2f91db;
-	}
-	.filled-button:active {
-		background-color: #0f83db;
-	}
+
 	.outline-button {
 		border: none;
 		width: 8rem;

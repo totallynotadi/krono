@@ -14,7 +14,7 @@
 	/**
 	 * @type {any}
 	 */
-	export let imageThumbnailURL;
+	export let blobURL;
 	/**
 	 * @type {any}
 	 */
@@ -28,28 +28,27 @@
 		style:gap={'1rem'}
 		transition:blur={{ duration: 400 }}
 	>
-		<!-- <div>lmao</div> -->
-		<img src={imageThumbnailURL} alt="" />
-		<!-- <button class="filled-button" on:click={closeModal}>CLOSE</button> -->
+		<!-- svelte-ignore a11y-missing-attribute -->
+		<!-- <iframe
+			src="https://docs.google.com/gview?url=http://remote.url.tld/path/to/document.doc&embedded=true"
+		/> -->
+
+		<iframe
+			src="https://docs.google.com/gview?url=https://www.adobe.com/support/ovation/ts/docs/ovation_test_show.ppt&embedded=true"
+		/>
+		<!-- <iframe src={`https://docs.google.com/gview?url=${blobURL}&embedded=true`} /> -->
 		<div class="title">{fileName}</div>
 	</div>
 {/if}
 
 <style>
-	img {
-		width: 100%;
-		/* height: 100%; */
-		max-width: min-content;
-		max-height: min-content;
-		/* background-size: contain; */
-	}
 	.modal {
-		width: 80%;
+		width: 60%;
 		/* width: fit-content; */
 		/* max-width: 1000px; */
 		/* min-width: 600px; */
-		height: 90%;
-		height: fit-content;
+		height: 98%;
+		/* height: fit-content; */
 
 		background-color: #f2f5f8;
 		background-color: transparent;
@@ -74,5 +73,9 @@
 		color: rgb(255, 255, 255);
 		font-size: 16px;
 		font-weight: 500;
+	}
+	iframe {
+		width: 100%;
+		height: 100%;
 	}
 </style>

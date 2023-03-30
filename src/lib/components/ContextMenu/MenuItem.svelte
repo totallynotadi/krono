@@ -29,10 +29,11 @@
 <style>
 	.menu-item {
 		height: fit-content;
-		background-color: transparent;
+		background-color: inherit;
 		padding: 0.8rem 1rem;
 		border-radius: 0.6rem;
-		backdrop-filter: blur(6px);
+		/* backdrop-filter: blur(6px); */
+		backdrop-filter: inherit;
 	}
 	.title {
 		font-size: 14px;

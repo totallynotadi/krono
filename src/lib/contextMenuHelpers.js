@@ -3,6 +3,12 @@ import { ref, uploadBytes } from 'firebase/storage';
 import { contextStore, refStore, authStore } from './stores';
 import { encrypt } from './cryptoUtils';
 
+import { openModal } from 'svelte-modals';
+import NewFolderModal from './components/modal/NewFolderModal.svelte';
+import { page } from '$app/stores';
+import { get } from 'svelte/store';
+import ShareModal from './components/modal/ShareModal.svelte';
+
 export const contextMenuTypes = ['file', 'folder', 'default'];
 
 /**
@@ -12,15 +18,18 @@ let mainContent;
 /**
  * @type {string}
  */
-let currentAuth;
+export let currentAuth;
 authStore.subscribe((newValue) => {
 	currentAuth = newValue.currentUser;
 });
-let currentUserRef = {};
+export let currentUserRef = {};
 refStore.subscribe((newValue) => {
-	currentUserRef = newValue;
+	currentUserRef = newValue.userRef;
 });
-let contextInfo = {};
+/**
+ * @type {{ eventDetails: any; showMenu?: boolean; pos?: { x: number; y: number; }; type?: null; elementOptions?: {}; }}
+ */
+let contextInfo;
 contextStore.subscribe((newValue) => {
 	contextInfo = newValue;
 });
@@ -37,12 +46,14 @@ export function showContextMenu(e, ElementType = null) {
 		mainContent = document.getElementById('main-content');
 	}
 	if (e.button == 2 && mainContent?.contains(e.explicitOriginalTarget)) {
-		let __type =
-			ElementType !== null
-				? ElementType
-				: contextMenuTypes.includes(e.explicitOriginalTarget.dataset.elementType)
-				? e.explicitOriginalTarget.dataset.elementType
-				: 'default';
+		// let __type =
+		// 	ElementType !== null
+		// 		? ElementType
+		// 		: contextMenuTypes.includes(e.explicitOriginalTarget.dataset.elementType)
+		// 		? e.explicitOriginalTarget.dataset.elementType
+		// 		: 'default';
+		let __type = ElementType;
+		// console.error('TYPE', __type, ElementType);
 		// @ts-ignore
 		contextStore.update(() => {
 			return {
@@ -51,7 +62,8 @@ export function showContextMenu(e, ElementType = null) {
 				pos: { x: e.x | window.currentMouseX, y: e.y | window.currentMouseY },
 				type: __type,
 				// @ts-ignore
-				elementOptions: elementOptions.get(__type)
+				elementOptions: elementOptions.get(__type),
+				eventDetails: e.details
 			};
 		});
 	}
@@ -61,7 +73,7 @@ export function showContextMenu(e, ElementType = null) {
 export function showUploadContextMenu(e) {
 	let elementPos = e.target.getBoundingClientRect();
 	let type = 'default';
-	console.log(elementPos);
+	// console.log(elementPos);
 	let menuPos = { x: elementPos.x + elementPos.width + 20, y: elementPos.y };
 	// @ts-ignore
 	contextStore.update((oldValue) => {
@@ -76,31 +88,43 @@ export function showUploadContextMenu(e) {
 }
 
 /**
- * @param {any} e
+ * @param {MouseEvent} e
+ * @param {String | null} type
+ *
  */
 export function onRightMouseDown(e, type = null) {
 	// @ts-ignore
-	if (contextInfo.showMenu) {
-		// @ts-ignore
-		contextStore.update((oldValue) => {
-			return { ...oldValue, showMenu: false, elementOptions: {} };
-		});
-		window.onmouseup = async (e) => {
-			// @ts-ignore
-			setTimeout(() => {
-				showContextMenu(e, type);
-			}, 25);
-		};
-		return;
-	}
+	// if (contextInfo.showMenu && e.button == 2) {
+	// 	// @ts-ignore
+	// 	contextStore.update((oldValue) => {
+	// 		return { ...oldValue, showMenu: false, elementOptions: {} };
+	// 	});
+	// 	// @ts-ignore
+	// 	console.log(contextInfo.showMenu);
+	// 	window.onmouseup = async (e) => {
+	// 		if (e.button == 2) {
+	// 			console.error('TYYYYYPE', type);
+	// 			setTimeout(() => {
+	// 				showContextMenu(e, type);
+	// 			}, 25);
+	// 		}
+	// 	};
+	// 	return;
+	// }
+	// console.info(type);
 	showContextMenu(e, type);
 }
 
 let defaultOptions = [
 	{
 		name: 'New Folder',
-		callback: () => {
+		callback: async () => {
 			console.log('create folder');
+			if (browser) {
+				// let folderName = 'new-test';
+				// @ts-ignore
+				openModal(NewFolderModal);
+			}
 		},
 		expandable: false
 	},
@@ -120,13 +144,17 @@ let defaultOptions = [
 					// @ts-ignore
 					var encrypted = await encrypt(file, currentAuth.uid);
 
-					// @ts-ignore
-					// var wordArray = lib.WordArray.create(reader.result);
-					// var encrypted = AES.encrypt(reader.result, key).toString();
-
 					console.info(encrypted, file);
+
+					let currentFolderName = get(page).url.pathname.split('/').slice(2).join('/');
+					let currentFolderRef =
+						// @ts-ignore
+						currentFolderName === '' ? currentUserRef : ref(currentUserRef, currentFolderName);
+					// let newFolderRef = ref(currentFolderRef, folderName);
+
 					// @ts-ignore
-					let fileRef = ref(currentUserRef, file.name);
+					// let fileRef = ref(currentUserRef, file.name);
+					let fileRef = ref(currentFolderRef, file.name);
 					let snapshot = await uploadBytes(fileRef, encrypted);
 					console.error('uploaded files', snapshot);
 
@@ -135,11 +163,6 @@ let defaultOptions = [
 					// console.log(file);
 					// let testRef = ref(rootRef, 'two');
 					// let imageRef = ref(testRef, file.name);
-
-					// @ts-ignore
-					// let fileRef = ref(currentUserRef, file.name);
-					// let snapshot = await uploadBytes(fileRef, file);
-					// console.error('uploaded files', snapshot);
 				};
 				input.click();
 			}
@@ -172,9 +195,79 @@ let defaultOptions = [
 
 let fileOptions = [
 	{
-		name: 'About',
+		name: 'Preview',
 		callback: () => {
-			console.log('about');
+			console.log('preview');
+		},
+		expandable: false
+	},
+	{
+		name: 'Download',
+		callback: () => {
+			console.log('Download');
+		},
+		expandable: false
+	},
+	{ name: '__section' },
+	{
+		name: 'Share',
+		callback: async () => {
+			console.log('Share');
+			// let currentFolderName = get(page).url.pathname.split('/').slice(2).join('/');
+			// let currentFolderRef =
+			// 	// @ts-ignore
+			// 	currentFolderName === '' ? currentUserRef : ref(currentUserRef, currentFolderName);
+			// @ts-ignore
+			let sharedFolderRef = ref(currentUserRef, '.shared.');
+			let eventData = contextInfo.eventDetails;
+			console.error(eventData);
+			// @ts-ignore
+			// let toBeSharedFileRef = ref(currentFolderRef, eventData.fileName);
+			let fileToBeShared = await fetch(eventData.blobURL)
+				.then((r) => r.blob())
+				.then((blob) => new File([blob], eventData.fileName, { type: blob.type }));
+			console.error(fileToBeShared, sharedFolderRef);
+			let fileSharedFolderRef = ref(sharedFolderRef, eventData.fileName);
+			let snapshot = await uploadBytes(fileSharedFolderRef, fileToBeShared);
+			console.error('file shared', snapshot);
+			// @ts-ignore
+			openModal(ShareModal, { ...eventData, fileType: fileToBeShared.type });
+		},
+		expandable: false
+	},
+	{
+		name: 'Add to Starred',
+		callback: () => {
+			console.log('Add to Starred');
+		},
+		expandable: false
+	},
+	{
+		name: 'Move',
+		callback: () => {
+			console.log('Move');
+		},
+		expandable: false
+	},
+	{
+		name: 'Rename',
+		callback: () => {
+			console.log('Rename');
+		},
+		expandable: false
+	},
+	{ name: '__section' },
+	{
+		name: 'Details',
+		callback: () => {
+			console.log('Details');
+		},
+		expandable: false
+	},
+	{
+		name: 'Remove',
+		callback: () => {
+			console.log('Remove');
 		},
 		expandable: false
 	}

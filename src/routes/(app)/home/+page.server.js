@@ -1,3 +1,5 @@
+export const ssr = false;
+
 // @ts-nocheck
 // @ts-ignore
 
