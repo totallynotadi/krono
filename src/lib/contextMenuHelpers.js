@@ -158,6 +158,8 @@ let defaultOptions = [
 					let snapshot = await uploadBytes(fileRef, encrypted);
 					console.error('uploaded files', snapshot);
 
+					window.location.reload();
+
 					// @ts-ignore
 					// let file = e.target.files[0];
 					// console.log(file);
@@ -274,6 +276,13 @@ let fileOptions = [
 ];
 
 let folderOptions = [
+	{
+		name: 'Open',
+		callback: () => {
+			console.log('preview');
+		},
+		expandable: false
+	},
 	{ name: '__section' },
 	{
 		name: 'About',

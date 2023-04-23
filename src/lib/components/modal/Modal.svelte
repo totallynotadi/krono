@@ -37,19 +37,22 @@
 
 <style>
 	img {
-		width: 100%;
+		/* width: 100%; */
 		/* height: 100%; */
-		max-width: min-content;
-		max-height: min-content;
+		/* min-width: min-content; */
+		/* min-height: min-content; */
+		max-width: 80vw;
+		max-height: 90vh;
+		object-fit: contain;
 		/* background-size: contain; */
 	}
 	.modal {
-		width: 80%;
-		/* width: fit-content; */
+		/* width: 80%; */
+		width: min-content;
 		/* max-width: 1000px; */
 		/* min-width: 600px; */
 		height: 90%;
-		height: fit-content;
+		height: min-content;
 
 		background-color: #f2f5f8;
 		background-color: transparent;

@@ -60,6 +60,8 @@
 			} else if (fileType.startsWith('video')) {
 				console.log('video');
 				openModal(VideoModal, { fileName: title, blobURL: imageURL });
+			} else if (fileType.startsWith('application')) {
+				openModal(WordViewerModal, { fileName: title, blobURL: imageURL });
 			}
 		}
 	}}

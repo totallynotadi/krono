@@ -38,10 +38,11 @@
 
 <style>
 	video {
-		width: 100%;
+		/* width: 100%; */
 		/* height: 100%; */
-		max-width: min-content;
-		max-height: min-content;
+		max-width: 80vw;
+		max-height: 90vh;
+		object-fit: contain;
 		/* background-size: contain; */
 	}
 	.modal {
