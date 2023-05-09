@@ -7,6 +7,7 @@
 	import { listAll, ref, getBlob, getMetadata } from 'firebase/storage';
 	import { onMount } from 'svelte';
 	import { decrypt, getBlobURL } from '$lib/cryptoUtils';
+	import Loader from '$lib/components/Loader.svelte';
 
 	// let fileName;
 	// let pathRef;
@@ -77,7 +78,11 @@
 		console.error(promisesList, decryptedUserFiles);
 
 		for (const folder of userFoldersList) {
-			if (folder.name === '.shared.' || folder.name === '.shared-with-me.') {
+			if (
+				folder.name === '.shared.' ||
+				folder.name === '.shared-with-me.' ||
+				folder.name == '.starred.'
+			) {
 				continue;
 			}
 			// console.log(folder);
@@ -100,7 +105,9 @@
 </script>
 
 {#await promise}
-	loading
+	<center class="fluid-column">
+		<Loader />
+	</center>
 {:then data}
 	<div class="fluid-column justify-start" style:gap={'2.4rem'}>
 		<!-- {#each data as file}

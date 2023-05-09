@@ -207,6 +207,23 @@ let fileOptions = [
 		name: 'Download',
 		callback: () => {
 			console.log('Download');
+			let eventData = contextInfo.eventDetails;
+
+			fetch(eventData.blobURL)
+				.then((resp) => resp.blob())
+				.then((blob) => {
+					const url = window.URL.createObjectURL(blob);
+					const a = document.createElement('a');
+					a.style.display = 'none';
+					a.href = url;
+					a.download = eventData.fileName;
+					document.body.appendChild(a);
+					a.click();
+					window.URL.revokeObjectURL(url);
+					// alert('your file has downloaded!'); // or you know, something with better UX...
+				})
+				.catch(() => alert('oh no!'));
+			// let blob = new Blob();
 		},
 		expandable: false
 	},
@@ -222,7 +239,6 @@ let fileOptions = [
 			// @ts-ignore
 			let sharedFolderRef = ref(currentUserRef, '.shared.');
 			let eventData = contextInfo.eventDetails;
-			console.error(eventData);
 			// @ts-ignore
 			// let toBeSharedFileRef = ref(currentFolderRef, eventData.fileName);
 			let fileToBeShared = await fetch(eventData.blobURL)
@@ -239,8 +255,25 @@ let fileOptions = [
 	},
 	{
 		name: 'Add to Starred',
-		callback: () => {
-			console.log('Add to Starred');
+		callback: async () => {
+			// @ts-ignore
+			let starredFolderRef = ref(currentUserRef, '.starred.');
+			let eventData = contextInfo.eventDetails;
+			console.error('EVENT DATA', eventData);
+			// let encryptedFile = await encrypt(blob)
+			let fileToBeStarred = await fetch(eventData.blobURL)
+				.then((r) => r.blob())
+				// .then((blob) => new File([blob], eventData.filename, { type: blob.type }));
+				.then(
+					async (blob) =>
+						// @ts-ignore
+						new File([await encrypt(blob, currentAuth.uid)], eventData.filename, {
+							type: blob.type
+						})
+				);
+			let fileStarredFolderRef = ref(starredFolderRef, eventData.fileName);
+			let snapshot = await uploadBytes(fileStarredFolderRef, fileToBeStarred);
+			console.log(snapshot);
 		},
 		expandable: false
 	},

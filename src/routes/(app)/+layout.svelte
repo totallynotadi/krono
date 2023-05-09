@@ -115,9 +115,9 @@
 					<div class="icons row">
 						<div class="icons-row row">
 							<!-- <BellOutline size={25} color={'#5F6368'} /> -->
-							<IconButton icon={BellOutline} />
-							<IconButton icon={HelpCircleOutline} />
-							<IconButton icon={CogOutline} />
+							<!-- <IconButton icon={BellOutline} /> -->
+							<!-- <IconButton icon={HelpCircleOutline} /> -->
+							<!-- <IconButton icon={CogOutline} /> -->
 						</div>
 						<div
 							on:click={() => {
@@ -151,8 +151,8 @@
 								dropdown={true}
 							/>
 							<SidebarNavItem title={'Starred'} linkTo={'/starred'} icon={StarOutline} />
-							<SidebarNavItem title={'Recent'} linkTo={'/recent'} icon={History} />
-							<SidebarNavItem title={'Trash'} linkTo={'/trash'} icon={TrashCanOutline} />
+							<!-- <SidebarNavItem title={'Recent'} linkTo={'/recent'} icon={History} />
+							<SidebarNavItem title={'Trash'} linkTo={'/trash'} icon={TrashCanOutline} /> -->
 						</div>
 					</div>
 				</div>
