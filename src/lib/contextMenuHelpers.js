@@ -8,6 +8,7 @@ import NewFolderModal from './components/modal/NewFolderModal.svelte';
 import { page } from '$app/stores';
 import { get } from 'svelte/store';
 import ShareModal from './components/modal/ShareModal.svelte';
+import toast from 'svelte-french-toast';
 
 export const contextMenuTypes = ['file', 'folder', 'default'];
 
@@ -159,6 +160,7 @@ let defaultOptions = [
 					console.error('uploaded files', snapshot);
 
 					window.location.reload();
+					toast.success('File Uploaded');
 
 					// @ts-ignore
 					// let file = e.target.files[0];

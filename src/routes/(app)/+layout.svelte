@@ -151,8 +151,8 @@
 								dropdown={true}
 							/>
 							<SidebarNavItem title={'Starred'} linkTo={'/starred'} icon={StarOutline} />
-							<!-- <SidebarNavItem title={'Recent'} linkTo={'/recent'} icon={History} />
-							<SidebarNavItem title={'Trash'} linkTo={'/trash'} icon={TrashCanOutline} /> -->
+							<SidebarNavItem title={'Recent'} linkTo={'/recent'} icon={History} />
+							<SidebarNavItem title={'Trash'} linkTo={'/trash'} icon={TrashCanOutline} />
 						</div>
 					</div>
 				</div>

@@ -66,3 +66,5 @@ export const authHandlers = {
 		await updatePassword(auth.currentUser, password);
 	}
 };
+
+export const contentStore = writable({})

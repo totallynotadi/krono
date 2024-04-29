@@ -9,6 +9,8 @@
 	import { decrypt, getBlobURL } from '$lib/cryptoUtils';
 	import Loader from '$lib/components/Loader.svelte';
 
+	import toast, { Toaster } from 'svelte-french-toast';
+
 	// let fileName;
 	// let pathRef;
 	// let encryptedBlob;
@@ -102,6 +104,12 @@
 		return { filesList: decryptedUserFiles, foldersList: finalFoldersList };
 	}
 	let promise = getUserFiles();
+
+	toast.promise(promise, {
+		loading: 'Fetching Files',
+		success: 'Files Fetched Successfully',
+		error: 'Could not fetch.'
+	});
 </script>
 
 {#await promise}

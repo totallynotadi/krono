@@ -5,6 +5,7 @@
 	import { decrypt, getBlobURL } from '$lib/cryptoUtils';
 	import FolderSection from '$lib/components/sections/FolderSection.svelte';
 	import FilesSection from '$lib/components/sections/FilesSection.svelte';
+	import toast from 'svelte-french-toast';
 
 	let currentUserRef = {};
 	refStore.subscribe((newValue) => {
@@ -55,9 +56,16 @@
 		}
 		return { filesList: finalDecryptedFiles, foldersList: finalFoldersList };
 	};
+
+	let promise = getPageData(currentFolderName);
+	toast.promise(promise, {
+		loading: 'Fetching Files',
+		success: 'Files Fetched Successfully',
+		error: 'Could not fetch.'
+	});
 </script>
 
-{#await getPageData(currentFolderName)}
+{#await promise}
 	loading...
 {:then data}
 	<div class="fluid-column justify-start" style:gap={'2.4rem'}>
